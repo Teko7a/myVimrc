@@ -2,8 +2,6 @@
 
 <center><img src="https://raw.githubusercontent.com/theniceboy/nvim/master/demo.png"></center>
 
-[中文版](./README_cn.md)
-
 Please **DO NOT** just copy this configuration folder without really looking at it! Please, at least, read this README file!
 
 <!-- TOC GFM -->

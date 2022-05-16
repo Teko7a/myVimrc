@@ -255,8 +255,6 @@ func! CompileRunGcc()
 		:term python3 %
 	elseif &filetype == 'html'
 		silent! exec "!".g:mkdp_browser." % &"
-	elseif &filetype == 'markdown'
-		exec "InstantMarkdownPreview"
 	elseif &filetype == 'tex'
 		silent! exec "VimtexStop"
 		silent! exec "VimtexCompile"
@@ -602,16 +600,6 @@ autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
 """ Formatting selected code.
 xmap <LEADER>f  <Plug>(coc-format-selected)
 nmap <LEADER>f  <Plug>(coc-format-selected)
-
-" ==================== vim-instant-markdown ====================
-let g:instant_markdown_slow = 0
-let g:instant_markdown_autostart = 0
-" let g:instant_markdown_open_to_the_world = 1
-" let g:instant_markdown_allow_unsafe_content = 1
-" let g:instant_markdown_allow_external_content = 0
-" let g:instant_markdown_mathjax = 1
-let g:instant_markdown_autoscroll = 1
-
 
 " ==================== vim-table-mode ====================
 noremap <LEADER>tm :TableModeToggle<CR>
@@ -1190,6 +1178,7 @@ unmap S
 
 """ markdown-preview
 let g:mkdp_auto_start         = 1
+let g:mkdp_auto_close         = 1
 let g:mkdp_browser            = 'surf'
 let g:mkdp_theme              = 'light'
 let g:mkdp_highlight_css = ''
