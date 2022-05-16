@@ -4,12 +4,7 @@
 "| |  | | | |   | |\  | \ V /  | || |  | |  _ <| |___
 "|_|  |_| |_|   |_| \_|  \_/  |___|_|  |_|_| \_\\____|
 
-" Author: @theniceboy
-
-" Checkout-list
-" vim-esearch
-" fmoralesc/worldslice
-" SidOfc/mkdx
+" Author: @theniceboy & patricky
 
 
 " ==================== Auto load for first time uses ====================
@@ -83,7 +78,10 @@ set colorcolumn=100
 set updatetime=100
 set virtualedit=block
 
+""" autosave & bufferred read & change pwd
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+au TextChanged,TextChangedI <buffer> if &readonly == 0 && filereadable(bufname('%')) | silent write | endif
+au BufEnter * silent! lcd %:p:h
 
 
 " ==================== Terminal Behaviors ====================
@@ -97,25 +95,15 @@ tnoremap <C-O> <C-\><C-N><C-O>
 let mapleader=" "
 noremap ; :
 nnoremap Q :x<CR>
-" nnoremap S :w<CR>
 " Open the vimrc file anytime
 nnoremap <LEADER>M :e $HOME/.config/nvim/init.vim<CR>
-" nnoremap <LEADER>rv :e .nvimrc<CR>
-" augroup NVIMRC
-"     autocmd!
-"     autocmd BufWritePost *.nvimrc exec ":so %"
-" augroup END
-" Undo operations
-" noremap l u
-" Insert Key
-" noremap k i
-" noremap K I
 " Copy to system clipboard
 vnoremap Y "+y
+noremap <LEADER>Y :%y+<CR>
 " Find pair
-" noremap ,. %
-" get current date
-map <LEADER>cd :r !date "+\%Y-\%m-\%d \%H:\%M:\%S"<CR>
+noremap ,. %
+" Get current date
+noremap <LEADER>cd :r !date "+\%Y-\%m-\%d \%H:\%M:\%S"<CR>
 " Search
 noremap <LEADER><CR> :nohlsearch<CR>
 " Adjacent duplicate words
@@ -125,37 +113,22 @@ nnoremap <LEADER>tt :%s/    /\t/g
 vnoremap <LEADER>tt :s/    /\t/g
 " Folding
 noremap <silent> <LEADER>o za
-
+" Center searching result
+map n nzz
+map N Nzz
 
 " ==================== Cursor Movement ====================
-" New cursor movement (the default arrow keys are used for resizing windows)
-"     ^
-"     k
-" < h   l >
-"     j
-"     v
-" noremap <silent> u k
-" noremap <silent> n h
-" noremap <silent> e j
-" noremap <silent> i l
-" noremap <silent> gu gk
-" noremap <silent> ge gj
 noremap <silent> \v v$h
-" U/E keys for 5 times u/e (faster navigation)
+" K/J keys for 5 times k/j (faster navigation)
 noremap <silent> K 5k
 noremap <silent> J 5j
-" N key: go to the start of the line
-" noremap <silent> N 0
-" I key: go to the end of the line
-" noremap <silent> I $
-" Faster in-line navigation
 noremap W 5w
 noremap B 5b
-" set h (same as n, cursor left) to 'end of word'
-" noremap h e
-" Ctrl + U or E will move up/down the view port without moving the cursor
-noremap <C-U> 5<C-y>
-noremap <C-E> 5<C-e>
+" Ctrl + J or K will move up/down the view port without moving the cursor
+noremap <C-K> 5<C-y>
+noremap <C-J> 5<C-e>
+
+
 " Custom cursor movement
 " source $HOME/.config/nvim/cursor.vim
 " If you use Qwerty keyboard, uncomment the next line.
@@ -209,13 +182,13 @@ noremap <LEADER>q <C-w>j:q<CR>
 
 
 " ==================== Tab management ====================
-" Create a new tab with tu
+" Create a new tab with tn
 noremap tn :tabe<CR>
 noremap tN :tab split<CR>
-" Move around tabs with tn and ti
+" Move around tabs with tu and td
 noremap tu :-tabnext<CR>
 noremap td :+tabnext<CR>
-" Move the tabs with tmn and tmi
+" Move the tabs with tmu and tmd
 noremap tmu :-tabmove<CR>
 noremap tmd :+tabmove<CR>
 
@@ -224,9 +197,9 @@ noremap tmd :+tabmove<CR>
 " Snippets
 function! SearchPlaceHolder()
 	call search("<++>", 'w')
+	:norm zz<CR>
 endfunction
 " Press space twice to jump to the next '<++>' and edit it
-" map <LEADER><LEADER> <ESC>/<++><CR>:nohlsearch<CR>c4l
 map <LEADER><LEADER> <ESC>:call SearchPlaceHolder()<CR>c4l
 map <LEADER>m mko<++><ESC>`k:delmarks k<CR>
 source $HOME/.config/nvim/md-snippets.vim
@@ -241,14 +214,9 @@ nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
 noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 " Spelling Check with <space>sc
 noremap <LEADER>sc :set spell!<CR>
-" Press ` to change case (instead of ~)
-noremap ` ~
-noremap <C-c> zz
-" Auto change directory to current dir
-autocmd BufEnter * silent! lcd %:p:h
 " Call figlet
-noremap tx :r !figlet 
-" find and replace
+noremap tx :r !figlet
+" find and replace (global)
 noremap \s :%s//g<LEFT><LEFT>
 " set wrap
 noremap <LEADER>sw :set wrap<CR>
@@ -270,16 +238,10 @@ func! CompileRunGcc()
 		term gcc % -o %< && time ./%<
 	elseif &filetype == 'cpp'
 		set splitbelow
-		exec "!g++ -std=c++2a % -Wall -O2 -o %<"
+		silent !exec "!g++ -std=c++2a % -Wall -O2 -o %<"
 		:sp
 		:res -5
 		:term ./%<
-	" elseif &filetype == 'cs'
-	"   set splitbelow
-	"   silent! exec "!mcs %"
-	"   :sp
-	"   :res -5
-	"   :term mono %<.exe
 	elseif &filetype == 'java'
 		set splitbelow
 		:sp
@@ -298,18 +260,10 @@ func! CompileRunGcc()
 	elseif &filetype == 'tex'
 		silent! exec "VimtexStop"
 		silent! exec "VimtexCompile"
-	" elseif &filetype == 'dart'
-	"   exec "CocCommand flutter.run -d ".g:flutter_default_device." ".g:flutter_run_args
-	"   silent! exec "CocCommand flutter.dev.openDevLog"
 	elseif &filetype == 'javascript'
 		set splitbelow
 		:sp
 		:term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
-	" elseif &filetype == 'racket'
-	"   set splitbelow
-	"   :sp
-	"   :res -5
-	"   term racket %
 	elseif &filetype == 'go'
 		set splitbelow
 		:sp
@@ -317,13 +271,13 @@ func! CompileRunGcc()
 	endif
 endfunc
 
-noremap sr :call CompileRunGcc()<CR>
+noremap sr :call CompileRunGccR()<CR>
 func SplitRight()
   set splitright
   :vsp
   :vertical res -20
 endfunc
-func! CompileRunGcc()
+func! CompileRunGccR()
   exec "w"
   if &filetype == 'c'
     :call SplitRight()
@@ -350,10 +304,15 @@ call plug#begin('$HOME/.config/nvim/plugged')
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 
+" Tag list
+Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
+
+" Floaterm
+" Plug 'voldikss/vim-floaterm'
+
 " Pretty Dress
-Plug 'morhetz/gruvbox'
-" Plug 'theniceboy/nvim-deus'
-"Plug 'arzg/vim-colors-xcode'
+" Plug 'morhetz/gruvbox'
+Plug 'theniceboy/nvim-deus'
 
 " Status line
 Plug 'theniceboy/eleline.vim', { 'branch': 'no-scrollbar' }
@@ -400,6 +359,9 @@ Plug 'kdheepak/lazygit.nvim'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'ctrlpvim/ctrlp.vim' , { 'for': ['cs', 'vim-plug'] } " omnisharp-vim dependency
 
+" CPP
+Plug 'clangd/coc-clangd'
+
 " HTML, CSS, JavaScript, Typescript, PHP, JSON, etc.
 Plug 'elzr/vim-json'
 Plug 'neoclide/jsonc.vim'
@@ -422,7 +384,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'pantharshit00/vim-prisma'
 
 " Go
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
@@ -435,15 +396,9 @@ Plug 'tweekmonster/braceless.vim', { 'for' :['python', 'vim-plug'] }
 "Plug 'plytophogy/vim-virtualenv', { 'for' :['python', 'vim-plug'] }
 "Plug 'tmhedberg/SimpylFold', { 'for' :['python', 'vim-plug'] }
 
-" Flutter
-Plug 'dart-lang/dart-vim-plugin'
-
-" Swift
-Plug 'keith/swift.vim'
-Plug 'arzg/vim-swift'
-
 " Markdown
-Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
+" Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle', 'for': ['text', 'markdown', 'vim-plug'] }
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['gitignore', 'markdown', 'vim-plug'] }
 Plug 'dkarter/bullets.vim'
@@ -459,7 +414,7 @@ Plug 'ggandor/lightspeed.nvim'
 "Plug 'Raimondi/delimitMate'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mg979/vim-visual-multi'
-Plug 'tomtom/tcomment_vim' " in <space>cn to comment a line
+Plug 'scrooloose/nerdcommenter'
 Plug 'theniceboy/antovim' " gs to switch
 Plug 'tpope/vim-surround' " type yskw' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
@@ -521,7 +476,8 @@ set re=0
 " ==================== Dress up my vim ====================
 set termguicolors " enable true colors support
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-silent! color gruvbox
+" silent! color gruvbox
+silent! color deus
 " hi Normal guibg=NONE ctermbg=NONE
 
 hi NonText ctermfg=gray guifg=grey10
@@ -529,7 +485,7 @@ hi NonText ctermfg=gray guifg=grey10
 
 
 " ==================== eleline.vim ====================
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 
 
 " ==================== GitGutter ====================
@@ -565,7 +521,6 @@ let g:coc_global_extensions = [
 	\ 'coc-json',
 	\ 'coc-lists',
 	\ 'coc-prettier',
-	\ 'coc-prisma',
 	\ 'coc-pyright',
 	\ 'coc-snippets',
 	\ 'coc-sourcekit',
@@ -599,10 +554,6 @@ function! Show_documentation()
 	endif
 endfunction
 nnoremap <M-h> :call Show_documentation()<CR>
-" set runtimepath^=~/.config/nvim/coc-extensions/coc-flutter-tools/
-" let g:coc_node_args = ['--nolazy', '--inspect-brk=6045']
-" let $NVIM_COC_LOG_LEVEL = 'debug'
-" let $NVIM_COC_LOG_FILE = '/Users/david/Desktop/log.txt'
 
 nnoremap <silent><nowait> <LEADER>d :CocList diagnostics<cr>
 nmap <silent> <LEADER>- <Plug>(coc-diagnostic-prev)
@@ -643,11 +594,14 @@ noremap <silent> <leader>ts :CocList tasks<CR>
 " coc-snippets
 imap <C-l> <Plug>(coc-snippets-expand)
 vmap <C-e> <Plug>(coc-snippets-select)
-let g:coc_snippet_next = '<c-e>'
-let g:coc_snippet_prev = '<c-n>'
+let g:coc_snippet_next = '<c-n>'
+let g:coc_snippet_prev = '<c-p>'
 imap <C-e> <Plug>(coc-snippets-expand-jump)
 autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
 
+""" Formatting selected code.
+xmap <LEADER>f  <Plug>(coc-format-selected)
+nmap <LEADER>f  <Plug>(coc-format-selected)
 
 " ==================== vim-instant-markdown ====================
 let g:instant_markdown_slow = 0
@@ -691,7 +645,7 @@ noremap <c-d> :BD<CR>
 let g:fzf_layout = { 'window': { 'width': 0.95, 'height': 0.95 } }
 
 
-" ==================== CTRLP (Dependency for omnisharp) ====================
+" ==================== CTRLP ====================
 let g:ctrlp_map = ''
 let g:ctrlp_cmd = 'CtrlP'
 
@@ -825,22 +779,6 @@ let g:go_highlight_variable_declarations = 0
 let g:go_doc_keywordprg_enabled = 0
 
 
-" ==================== OmniSharp ====================
-let g:OmniSharp_typeLookupInPreview = 1
-let g:omnicomplete_fetch_full_documentation = 1
-let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_highlight_types = 2
-let g:OmniSharp_selector_ui = 'ctrlp'
-autocmd Filetype cs nnoremap <buffer> gd :OmniSharpPreviewDefinition<CR>
-autocmd Filetype cs nnoremap <buffer> gr :OmniSharpFindUsages<CR>
-autocmd Filetype cs nnoremap <buffer> gy :OmniSharpTypeLookup<CR>
-autocmd Filetype cs nnoremap <buffer> ga :OmniSharpGetCodeActions<CR>
-autocmd Filetype cs nnoremap <buffer> <LEADER>rn :OmniSharpRename<CR><C-N>:res +5<CR>
-sign define OmniSharpCodeActions text=💡
-let g:coc_sources_disable_map = { 'cs': ['cs', 'cs-1', 'cs-2', 'cs-3'] }
-
-
 " ==================== goyo ====================
 map <LEADER>gy :Goyo<CR>
 
@@ -952,19 +890,14 @@ noremap gp :AsyncRun git push<CR>
 let g:asyncrun_open = 6
 
 
-" ==================== dart-vim-plugin ====================
-let g:dart_style_guide = 2
-let g:dart_format_on_save = 1
-let g:dartfmt_options = ["-l 100"]
-
-
-" ==================== tcomment_vim ====================
-" nnoremap ci cl
-let g:tcomment_textobject_inlinecomment = ''
-nmap <LEADER>cn g>c
-vmap <LEADER>cn g>
-nmap <LEADER>cu g<c
-vmap <LEADER>cu g<
+" ==================== NERDCommenter ====================
+let g:NERDSpaceDelims            = 1
+let g:NERDCompactSexyComs        = 1
+let g:NERDDefaultAlign           = 'left'
+let g:NERDAltDelims_java         = 1
+let g:NERDCustomDelimiters       = { 'php': { 'left': '/*','right': '*/' },'html': { 'left': '<!--','right': '-->' },'py': { 'left': '#' },'sh': { 'left': '#' } }
+let g:NERDCommentEmptyLines      = 1
+let g:NERDTrimTrailingWhitespace = 1
 
 
 " ==================== vim-move ====================
@@ -980,6 +913,9 @@ let g:any_jump_window_height_ratio = 0.9
 " ==================== typescript-vim ====================
 let g:typescript_ignore_browserwords = 1
 
+" ==================== tag list ====================
+let g:tagbar_ctags_bin = '/usr/bin/ctags'
+map <silent> <LEADER>T :TagbarOpenAutoClose<CR>
 
 " ==================== Agit ====================
 nnoremap <LEADER>gl :Agit<CR>
@@ -1249,3 +1185,11 @@ au FileType cpp map <LEADER>K `k:delmarks k<CR>zz
 au BufNewFile *.cpp exec ":call NewFileCode()"
 au FileType cpp map <LEADER>N gg"w"_dGqwq:call NewFileCode()<CR>
 au FileType cpp map <LEADER>C gg"w"_dGqwq:call NewFileCodF()<CR>
+
+unmap S
+
+""" markdown-preview
+let g:mkdp_auto_start         = 1
+let g:mkdp_browser            = 'surf'
+let g:mkdp_theme              = 'light'
+let g:mkdp_highlight_css = ''

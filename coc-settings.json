@@ -46,7 +46,7 @@
 		"value": "\uf89f",
 		"variable": "\ue71b"
 	},
-	"diagnostic.signOffset": 1,
+	// "diagnostic.signOffset": 1,
 	"diagnostic.errorSign": "\uf467",
 	"diagnostic.warningSign": "\uf071",
 	"diagnostic.infoSign": "\uf129",
@@ -186,6 +186,7 @@
 	"todolist.promptForReminder": false,
 	"coc-actions.hideCursor": false,
 	"coc-actions.showActionKind": true,
+	"clangd.fallbackFlags": ["-std=c++2a"],
 	"diagnostic-languageserver.filetypes": {
 		"vim": "vint",
 		"email": "languagetool",
@@ -234,7 +235,7 @@
 		},
 		"ccls": {
 			"command": "ccls",
-			"filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+			"filetypes": ["cuda", "objc", "objcpp"],
 			"rootPatterns": [".ccls", ".ccls-root", "compile_commands.json", ".git/", ".hg/"],
 			"initializationOptions": {
 				"cache": {
