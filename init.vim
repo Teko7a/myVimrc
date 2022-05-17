@@ -229,6 +229,7 @@ map \g :call SynGroup()<CR>
 
 " Compile function
 noremap r :call CompileRunGcc()<CR>
+au FileType markdown map r :MarkdownPreview<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
@@ -238,10 +239,9 @@ func! CompileRunGcc()
 		term gcc % -o %< && time ./%<
 	elseif &filetype == 'cpp'
 		set splitbelow
-		silent !exec "!g++ -std=c++2a % -Wall -O2 -o %<"
 		:sp
 		:res -5
-		:term ./%<
+    term g++ % -std=c++2a -Wall -O2 -o %< && ./%< && rm ./%< -f
 	elseif &filetype == 'java'
 		set splitbelow
 		:sp
@@ -282,7 +282,7 @@ func! CompileRunGccR()
     term gcc -Wall % -o %< && ./%<
   elseif &filetype == 'cpp'
     :call SplitRight()
-    term g++ % -std=c++2a -Wall -O2 -o %< && ./%<
+    term g++ % -std=c++2a -Wall -O2 -o %< && ./%< && rm ./%< -f
   elseif &filetype == 'java'
     :call SplitRight()
     term javac %; java %<
@@ -596,10 +596,6 @@ let g:coc_snippet_next = '<c-n>'
 let g:coc_snippet_prev = '<c-p>'
 imap <C-e> <Plug>(coc-snippets-expand-jump)
 autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
-
-""" Formatting selected code.
-xmap <LEADER>f  <Plug>(coc-format-selected)
-nmap <LEADER>f  <Plug>(coc-format-selected)
 
 " ==================== vim-table-mode ====================
 noremap <LEADER>tm :TableModeToggle<CR>
@@ -1177,8 +1173,7 @@ au FileType cpp map <LEADER>C gg"w"_dGqwq:call NewFileCodF()<CR>
 unmap S
 
 """ markdown-preview
-let g:mkdp_auto_start         = 1
+let g:mkdp_auto_start         = 0
 let g:mkdp_auto_close         = 1
-let g:mkdp_browser            = 'surf'
 let g:mkdp_theme              = 'light'
 let g:mkdp_highlight_css = ''
