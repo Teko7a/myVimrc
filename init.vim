@@ -229,7 +229,6 @@ map \g :call SynGroup()<CR>
 
 " Compile function
 noremap r :call CompileRunGcc()<CR>
-au FileType markdown map r :MarkdownPreview<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
@@ -282,7 +281,7 @@ func! CompileRunGccR()
     term gcc -Wall % -o %< && ./%<
   elseif &filetype == 'cpp'
     :call SplitRight()
-    term g++ % -std=c++2a -Wall -O2 -o %< && ./%< && rm ./%< -f
+    term g++ % -std=c++2a -Wall -O2 -o %< && ./%< -f
   elseif &filetype == 'java'
     :call SplitRight()
     term javac %; java %<
@@ -1165,6 +1164,7 @@ function NewFileCodF()
 endfunc
 
 au FileType cpp map <LEADER>R mkgg:call SearchPlaceHolder2()<CR>j<ESC>:r ~/.config/nvim/cppfile/.hpp<LEFT><LEFT><LEFT><LEFT>
+au FileType markdown map <LEADER>R :r ~/.config/nvim/cppfile/sol.markdown<CR>
 au FileType cpp map <LEADER>K `k:delmarks k<CR>zz
 au BufNewFile *.cpp exec ":call NewFileCode()"
 au FileType cpp map <LEADER>N gg"w"_dGqwq:call NewFileCode()<CR>
