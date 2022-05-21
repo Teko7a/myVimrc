@@ -229,6 +229,7 @@ map \g :call SynGroup()<CR>
 
 " Compile function
 noremap r :call CompileRunGcc()<CR>
+au FileType markdown noremap r :MarkdownPreview<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
@@ -1164,11 +1165,11 @@ function NewFileCodF()
 endfunc
 
 au FileType cpp map <LEADER>R mkgg:call SearchPlaceHolder2()<CR>j<ESC>:r ~/.config/nvim/cppfile/.hpp<LEFT><LEFT><LEFT><LEFT>
-au FileType markdown map <LEADER>R :r ~/.config/nvim/cppfile/sol.markdown<CR>
+" au FileType markdown map <LEADER>R :r ~/.config/nvim/cppfile/sol.markdown<CR>
 au FileType cpp map <LEADER>K `k:delmarks k<CR>zz
 au BufNewFile *.cpp exec ":call NewFileCode()"
-au FileType cpp map <LEADER>N gg"w"_dGqwq:call NewFileCode()<CR>
-au FileType cpp map <LEADER>C gg"w"_dGqwq:call NewFileCodF()<CR>
+au FileType cpp map <LEADER>N ggdGqwq:call NewFileCode()<CR>
+au FileType cpp map <LEADER>C ggdGqwq:call NewFileCodF()<CR>
 
 unmap S
 

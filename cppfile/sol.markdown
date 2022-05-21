@@ -1,21 +1,18 @@
 # <++>
-<detail>
-<summary>题意</summary>
+## 题意
 
 <++>
 
-</detail>
-<detail>
-<summary>解答</summary>
+## 解答
 
 <++>
 
-</detail>
-<detail>
-<summary>参考代码</summary>
+<details><summary>展开代码</summary>
 
 <++>
 
-</detail>
+</details>
+
+> 复杂度： $\mathcal O(<++>)$
 
 > Bonus: <++>

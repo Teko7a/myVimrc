@@ -2,7 +2,7 @@
 
 using i64 = long long; // <+>
 
-void solve() { 
+void solve() {
   <++>
 
 }
