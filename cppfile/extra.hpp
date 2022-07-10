@@ -24,3 +24,16 @@ std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 template <class T> T randint(T a, T b) {
   return std::uniform_int_distribution<T>(a, b)(rng);
 }
+
+template <typename Tuple, size_t... Index>
+std::ostream &serialize_tuple(std::ostream &out, const Tuple &t,
+                              std::index_sequence<Index...>) {
+  out << "(";
+  (..., (out << (Index == 0 ? "" : ", ") << std::get<Index>(t)));
+  return out << ")";
+}
+
+template <typename... T>
+std::ostream &operator<<(std::ostream &out, const std::tuple<T...> &t) {
+  return serialize_tuple(out, t, std::make_index_sequence<sizeof...(T)>());
+}

@@ -218,6 +218,8 @@ noremap <LEADER>sc :set spell!<CR>
 noremap tx :r !figlet
 " find and replace (global)
 noremap \s :%s//g<LEFT><LEFT>
+" find and remove (global)
+noremap \r :g//d<LEFT><LEFT>
 " set wrap
 noremap <LEADER>sw :set wrap<CR>
 " press \g to show hlgroup
@@ -241,7 +243,7 @@ func! CompileRunGcc()
 		set splitbelow
 		:sp
 		:res -5
-    term g++ % -std=c++2a -Wall -O2 -o %< && ./%< && rm ./%< -f
+    term g++ % -std=c++23 -Wall -O2 -o %< && ./%< && rm ./%< -f
 	elseif &filetype == 'java'
 		set splitbelow
 		:sp
@@ -303,7 +305,7 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
 
 " Tag list
-Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
+Plug 'preservim/tagbar', { 'on': 'TagbarOpenAutoClose' }
 
 " Floaterm
 " Plug 'voldikss/vim-floaterm'
@@ -311,12 +313,13 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 " Pretty Dress
 " Plug 'morhetz/gruvbox'
 Plug 'theniceboy/nvim-deus'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 " Status line
 Plug 'theniceboy/eleline.vim', { 'branch': 'no-scrollbar' }
 
 " General Highlighter
-Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+" Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'RRethy/vim-illuminate'
 
 " File navigation
@@ -387,10 +390,10 @@ Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
 
 " Python
-Plug 'Vimjas/vim-python-pep8-indent', { 'for' :['python', 'vim-plug'] }
+" Plug 'Vimjas/vim-python-pep8-indent', { 'for' :['python', 'vim-plug'] }
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for' :['python', 'vim-plug'] }
 Plug 'tweekmonster/braceless.vim', { 'for' :['python', 'vim-plug'] }
-"Plug 'vim-scripts/indentpython.vim', { 'for' :['python', 'vim-plug'] }
+Plug 'vim-scripts/indentpython.vim', { 'for' :['python', 'vim-plug'] }
 "Plug 'plytophogy/vim-virtualenv', { 'for' :['python', 'vim-plug'] }
 "Plug 'tmhedberg/SimpylFold', { 'for' :['python', 'vim-plug'] }
 
@@ -430,7 +433,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'theniceboy/pair-maker.vim'
 Plug 'theniceboy/vim-move'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
 
 " For general writing
 Plug 'junegunn/goyo.vim'
@@ -476,8 +479,9 @@ set re=0
 set termguicolors " enable true colors support
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 " silent! color gruvbox
-silent! color deus
-" hi Normal guibg=NONE ctermbg=NONE
+" silent! color deus
+silent! color catppuccin_macchiato
+hi Normal guibg=NONE ctermbg=NONE
 
 hi NonText ctermfg=gray guifg=grey10
 "hi SpecialKey ctermfg=blue guifg=grey70
@@ -525,7 +529,6 @@ let g:coc_global_extensions = [
 	\ 'coc-sourcekit',
 	\ 'coc-stylelint',
 	\ 'coc-syntax',
-	\ 'https://github.com/theniceboy/coc-tailwindcss',
 	\ 'coc-tasks',
 	\ 'coc-translator',
 	\ 'coc-tsserver',

@@ -1,8 +1,12 @@
-## <center>The Ultimate NeoVim Config for [Colemak](https://colemak.com/) Users</center>
+## <center>The Ultimate NeoVim Config Forked From [theCW](https://github.com/theniceboy)</center>
 
-<center><img src="https://raw.githubusercontent.com/theniceboy/nvim/master/demo.png"></center>
+**TODOS**:
 
-Please **DO NOT** just copy this configuration folder without really looking at it! Please, at least, read this README file!
+ + use `init.lua` instead.
+
+----
+
+<center><img src="./demo.png"></center>
 
 <!-- TOC GFM -->
 
